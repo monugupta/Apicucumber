@@ -1,0 +1,183 @@
+NOW CREATE A MAVEN PROJECT WITH (If you cretea maven project then while creating project of maven select quick start template as cucumber support quick start template)
+
+now add <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
+<dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>cucumber-java</artifactId>
+    <version>5.5.0</version>
+</dependency>
+ for cucumber as we are using latest jars and io.cucumber---:
+ Juint--jars--:
+<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>4.8.0</version>
+			<scope>test</scope>
+		</dependency>
+Now add rest assured jars as well-:s
+<!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
+<dependency>
+    <groupId>io.rest-assured</groupId>
+    <artifactId>rest-assured</artifactId>
+    <version>4.1.2</version>
+    <scope>test</scope>
+</dependency>
+
+NOW FOR SERIALIZATION AND DESERILIZATION IN API WE USE JARS--:
+jackson databind--:
+<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.10.1</version>
+</dependency>
+
+NOW AFTER THAT WE CAN USE APP PLACE API OF GOOGLE TO BUILD OUR FRAMEOWRK---:
+
+NOw we use CUCUMBER --:SO CREATE A NEW PACKGE--:FEATURES(Store all the feature file) in SRC TEST 
+AND CREATE A STEO DEFINITION PACKGES ALSO IN TEST SRC 
+
+NOW THEN ON FEATURE CREATE A PLACEVAKIDATION.FEATURE FILE NAME --:
+
+Now create another package as CucumberOptions--:and in this package make a class known as TestRunner
+Now add pozo classes in main java packages--:nW AS OF NOW WE CAN AMKE ALL REUQEST AND RESPONSE N Step definition as shown--:
+BUT WE CAN O[TIMIZE THE SAME ALSO--LATER ON 
+NOW OPTIMIZING  THE PROJECT----:HOW To do that--:
+
+First of all json vala--:
+Now for that jo json me set values vala thing tha usko ake new package me karna --:
+create a new package known as resouces and make a class known as TestDataBuild in main test packages---:
+NOW AFTER THAT OBSERVE THAT BAE URI IS COMMON IN ALL THE FRAEMWORK ---:		RestAssured.baseURI="https://rahulshettyacademy.com";
+
+SO WE CAN KEEP IT IN DIFERENT METHOD--
+
+NOW OBSERVE ALL THE 3 API REQUEST BUILDER VALI THING IS COMMON--
+so crete a things in UTILITY FILE-:CLASS IN RESOURCES
+AND IN THIS MAKE AA THE REQUEST AND RESPONSE BUILDER IN IT (As we can break the API in different functions)
+NOW FOR ADD LOGS WE HAVE CLASS --:addfilter like--:
+PrintStream log = new PrintStream(new FileOutputStream("looging.txt"));
+		RestAssured.baseURI = "https://rahulshettyacademy.com";
+		p = new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").setContentType(ContentType.JSON)
+				.addQueryParam("key", "qaclick123").addFilter(RequestLoggingFilter.logRequestTo(log)).build();
+		return p;
+		
+		This one is verfy important
+		
+		NOW AFTER THAT WE CAN MAKE CONFIG FIEL FOR READING BASE URI AND ALL FROM CONFIG FILE.
+		NOW CRETE A PROPEERTY FILE  IN RESOUCES...CTION IN UTILES FOR READING A FILE FROM 
+		nOW MAKE A FUNCTION I UTILES A GLOBALVALE()--:
+		NOW AFTER THAT WE WORK ON DATA DRIVEN MACHANISHM--:
+		NOW USE EXAMPLES IN FEATURE TO RUN ON DIFFERENT DATA (Jo pzo class me set method me hard code data pass kar rahe hai uuse dynamic karna hai )
+		
+		Now we have done this 0-----:
+		BUT HERE IS PROBLEM --:LOG IS GETTING REPLACE SO USE IF(RES==NULL) IN UTILES---:IN METHIOD
+		and make sure we can make a res as static as when agian come then new object is present..
+		
+		
+		NOW WE ARE HERE TO SEE ENUM CLASS--:
+		
+		NOW WHY WE USE ENUM CLASSS-:
+		
+		WE KNOE IN STEP DEFINITION WE ALSO HARDCODED OUR REOSUCES LIKE--/maps/api/place/add/json
+		
+	BUT THSI CAN BE ALSO BE IMPLEMENTD BY USING CONSTANT CLASS AND DEFINE IN FORM OF METHODD...
+	but when there are lot of resources so ho we can handle thiss---:
+	THat is wahy we can make enum class--:
+	Now what is enumclass and how we make 
+	
+	Now in our current project in resouce package define enum class name a Apiresources--:
+	 basically in enum class how we can declare methods--:
+	 public enum ApiResources {
+	AppPlaceAPI("/maps/api/place/add/json"), DeletePlaceApi("");
+	// after this we can also define the constructor for it
+	private String resources;
+
+	ApiResources(String resources) {
+		this.resources = resources;
+	}
+
+	public String getResorces() {
+		return resources;
+	}
+
+}
+Now same thing we can do in step definitoon --:create a object of API resource and use method value of as--:define below--:
+
+ApiResources resou = ApiResources.valueOf(resource);
+		String resourcess = resou.getResorces();
+		
+		NOW WE OBSERVE THAT IN RESPONSE OF POST ADD PLACE API WE GENERATE A ID AND THEN WE PASS IN DELETE AND GETPACE API SOE FURTHER WE CAN DO AS--:
+		
+		Now i want to write a functionaly end to end scenario for that--:
+		NOW addd in step definition for the same we add new step as--:
+		And verify place_id created maps to "<setName>" using "GetPlaceAPI"
+		
+		Now we also add one utility for jsonth path to get key 
+		
+		NOW HERE ONE IMP THNING IS THAT WE CAN CALL ONE METHOD IN STEP DEFINITION INTO ANOTHER METHOD IN STEP DEFINIITOOON
+		
+		NOW WE KNOW THAT EVERY SCENARIO IS TREATED AS NEW TEST CASE--:
+		NOW CREETE A NEW SCNEARIO--:VEFIY DELETE PALCE FUNCTIOMALY IS WORKING FINE .
+		Given DeletePlace palyload 
+	When user calls "DeletePlaceApi" with "Post" http request 
+	Then the API call got success with status code 200 
+	And "status" in response body is "OK" 
+	
+	NOW ONLY THING IS WE CAN ADD BODY OR MAKE POZOCLASS FOR IT--:Now here imp things is that we can create a pozo class when Json is complex only--:
+	Other wise we can go for simple method only--:in testDataBuild
+	we can make a method of payload for depelepalce by making function --:
+	and we can depend on another scenario for given palce id----:
+	
+	How to use it--:(If you want same this in another tets case then make it static(because instance varibale ka scope is distry for object end)
+	
+	NOW WE CAN USE DATA IF 1 API INOT ANOTHER BUT WE CAN DEPEND ON  1ST SCENARIO--
+	NOW IF YOU WANT OT MAKE SCENARIO WHICH IS INDEPENT OF EACH OTHER THEN WE CAN DO---:
+	NWO HERE WE CAN RUN TEST CASES SEPRATELY----:
+	
+	BY USINF TAGS--:(THIS IS LIKE GROUPING IN TESTNG)
+	And this can be done on feature level as well as on scenario level
+	NOW USE TAGS IN FEATURE FILE--:
+	
+	NWO WE CAN CRETEA CLASS IN RESOURCE FOLDER AND NAME IT AS 
+	
+	Now creAte a new class but here we had NOTED ONE THNG IS THAT -- IF WE WANT TO USE THE HOOK THEN WE CAN NEED TO IMPLEMNET CLASS AND FUNCTIONS IN SAME PACKAGE WHERE WE CAN IMPLENT STEP DEFINITION ..
+
+
+NOW THEN WE CAN RUN THE PROJECR BY USING MAVEN COMMAND AS--:compile--test---verfiy(maven life cycle)
+FOR BASIC GOT TO CMD--:NOW GO TO YOUR PROJECT --:AND TYPE--:mvn test--:this can complie as well run teh project 	
+
+Now we can also run specific  tags through maven by not giving in test runner as--:
+mvn test -Dcucumber.optins="--tags @DeletePlaceApi"
+
+Now Finalyy how to generate reports in framework--:Now here we can generaeta report in new way as--:
+Go to the url -:https://github.com/damianszczepanik/maven-cucumber-reporting(Now cply the plugin)
+and in test runner in cucumber options you need to generate a json so provide the plugin for that --:and you must run mvn in verfiy mode 
+
+
+as mvn test verfiy --:add mvn jars in pom.xml and remove the clacification cide from there as well--:this one --:							<!-- optional, defaults to outputDirectory if not specified -->
+							<classificationDirectory>${project.build.directory}/classifications</classificationDirectory>
+							<classificationFiles>
+								<!-- supports wildcard or name pattern -->
+								<param>sample.properties</param>
+								<param>other.properties</param>
+							</classificationFiles>
+							
+							Now run as mvn test verify and see the cucumber report--:
+							Main thing in this report you can procide the json report path to it--:json:target/jsonReports/cucumber-report.json
+				Report is generated in filder--:D:\Api_Automation\Api_Workspace\ApiFrameworkCucmber\target\cucumber-html-reports\overview-features.html
+							
+							NOW AFTER THAT WE CAN MOVE TO JENKINS TO THIS PROJECT--:
+							Now in jenkins create free style project--:
+							Now in custom direcroty gove the path fo project 
+							Now in add build step--:select mavne top level and given mvn test verify
+							
+							NOW FINALLLY WE CAN SEE HOW TO RUN JENOJNS JOB PARAMETERTISED--:
+							NOW IN CONFIG--:
+							SELECT THIS PROJECT IS PARAMETERISED OPTION--:
+							AND SELECT CHOICE PARAMETER...AND DEFINE EALL TGAS HERE 
+							
+							
+							
+
+	
+		
